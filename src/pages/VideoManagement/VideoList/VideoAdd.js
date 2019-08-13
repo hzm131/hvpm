@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import axiosApi from "../../../services/axios";
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import storage from '@/utils/storage'
 import {
@@ -10,21 +9,16 @@ import {
   Select,
   Button,
   Card,
-  InputNumber,
   Row,
   Icon,
   Col,
-  AutoComplete,
   Upload,
   message,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-// import styles from './style.less';
-function onSelect(value) {
-  console.log('onSelect', value);
-}
-const FormItem = Form.Item;
-const Dragger = Upload.Dragger;
+
+const { TextArea } = Input;
+const { Option } = Select;
 
 @connect(({PA,loading }) => ({
   PA,
@@ -33,18 +27,17 @@ const Dragger = Upload.Dragger;
 @Form.create()
 class ProjectAddForms extends PureComponent {
   state ={
-    type:'',
-    payload: "",
-    token:null,
-  }
-  pmdatasource = ['anne', 'jack', 'jone'];
+    strToken:"",
+  };
+
   validate = e => {
     const { dispatch, form} = this.props;
     e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      console.log('0000000000',values)
+    form.validateFields((err, values) => {
+      console.log("values",values);
+      const { uploadVideo } = values;
       const formData = new FormData();
-      values.attachment.fileList.map(item => {
+      uploadVideo.fileList.map(item => {
         formData.append('file', item);
       });
       dispatch({
@@ -53,162 +46,132 @@ class ProjectAddForms extends PureComponent {
       });
     });
   };
+
   componentDidMount() {
-    const { dispatch } = this.props;
-    // this.getMock();
-    const aa = storage.get("token");
-    this.setState({token:aa})
-    console.log('stor',aa)
+    const token = storage.get("token");
+    if(token){
+      const strToken = `token  ${token}`;
+      this.setState({
+        strToken
+      })
+    }
   }
 
-  render() {
-    const {formManage, submitting } = this.props;
-    const { token } = this.state;
-    const props = {
-      name: 'file',
-      action: '/upload/image',
-      onChange(info) {
-        const { status } = info.file;
-        let fileList = [...info.fileList];
-        if (status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
+  props = {
+    name: 'file',
+    action: 'http://192.168.2.219:3000/upload/video',
+    headers: {
+      authorization: this.state.strToken,
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
-          message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
+  render() {
 
     const {
-      form: { getFieldDecorator, getFieldValue },
+      form: { getFieldDecorator },
     } = this.props;
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-      },
-    };
-
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
 
     return (
       <PageHeaderWrapper>
         <Card title="新增视频">
           <Row gutter={16}>
-            <Col lg={6} md={12} sm={24}>
-              <Form.Item label='电影名称'>
-                {getFieldDecorator('moviename',{
+            <Col lg={6} md={12} sm={24} >
+              <Form.Item label='视频名称'>
+                {getFieldDecorator('name',{
                   rules: [{required: true}]
                 })(<Input placeholder="请输入电影名称" />)}
               </Form.Item>
             </Col>
-            <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
-              <Form.Item label='电影语种'>
-                {getFieldDecorator('movielang',{
-                  rules: [
-                    {
-                      required: true,
-                      message:'请选择语种类型'
-                    }
-                  ]
+            <Col xl={{ span: 6, offset: 3 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
+              <Form.Item label='产地'>
+                {getFieldDecorator('origin',{
                 })(
-                  <Select placeholder="请选择语种类型" style={{ width: '100%' }}>
-                    <Option value="chinese">中文</Option>
-                    <Option value="english">英文</Option>
-                  </Select>
+                  <Input placeholder="请输入产地" />
                 )}
               </Form.Item>
             </Col>
-            <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
-              <Form.Item label='电影时长'>
-                {getFieldDecorator('movietime', {
-                  rules: [
-                    {
-                      required: true,
-                      message:'请输入电影时长'
-                    }
-                  ]
-                })(<Input placeholder="请输入电影时长"  />)}
+            <Col xl={{ span: 6, offset: 3 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
+              <Form.Item label='片长(分钟)'>
+                {getFieldDecorator('duration', {
+                })(<Input placeholder="请输入视频片长"  />)}
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col lg={6} md={12} sm={24}>
-              <Form.Item label='电影评分'>
-                {getFieldDecorator('moviemark',{
-                  rules: [
-                    {
-                      required: true,
-                      message:'请输入电影评分'
-                    }
-                  ]
+              <Form.Item label='语种'>
+                {getFieldDecorator('language',{
                 })(
-                  <Input placeholder="请输入电影评分" type='number'/>
+                  <Input placeholder="请输入语种"/>
                 )}
               </Form.Item>
             </Col>
-            <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
-              <Form.Item label='电影类别'>
-                {getFieldDecorator('movieclass',{
-                  rules: [{required: true}]
+            <Col xl={{ span: 6, offset: 3 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
+              <Form.Item label='年份'>
+                {getFieldDecorator('years',{
                 })(
-                  <Select placeholder="请选择电影类别" style={{ width: '100%' }}>
-                    <Option value="action">动作片</Option>
-                    <Option value="comedy">喜剧片</Option>
-                    <Option value="terror">恐怖片</Option>
+                  <DatePicker  placeholder="请选择年份" style={{ width: '100%' }}/>
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={{ span: 6, offset: 3 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
+              <Form.Item label='评分'>
+                {getFieldDecorator('score',{
+                })(
+                  <Input placeholder="请输入评分" type="Number"/>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col lg={6} md={12} sm={24}>
+              <Form.Item label='类别'>
+                {getFieldDecorator('category',{
+                })(
+                  <Select placeholder="请选择类型"style={{ width: '100%' }}>
+                    <Option value="恐怖片">恐怖片</Option>
+                    <Option value="喜剧片">喜剧片</Option>
+                    <Option value="动作片">动作片</Option>
+                    <Option value="科幻片">科幻片</Option>
+                    <Option value="漫改">漫改</Option>
+                    <Option value="原创">原创</Option>
                   </Select>
                 )}
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={16}>
             <Col lg={{ span: 24 }} md={{ span: 24 }} sm={24}>
-              <Form.Item label='电影简介'>
-                {getFieldDecorator('moviememo',{
-                  rules: [
-                    {
-                      required: true,
-                      message:'请输入电影简介'
-                    }
-                  ]
+              <Form.Item label='视频简介'>
+                {getFieldDecorator('introduction',{
                 })(
-                  <Input placeholder="请输入电影简介" type='number'/>
+                  <TextArea rows={4} placeholder="请输入视频简介"/>
                 )}
               </Form.Item>
             </Col>
-
           </Row>
           <Row gutter={16}>
             <Col lg={{ span: 24 }} md={{ span: 24 }} sm={24}>
-              <FormItem {...formItemLayout} label="上传文件">
-                {getFieldDecorator('attachment')(
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company
-                      data or other band files
-                    </p>
-                  </Dragger>
+              <Form.Item label='上传视频'>
+                {getFieldDecorator('uploadVideo',{
+                })(
+                  <Upload {...this.props}>
+                    <Button>
+                      <Icon type="upload" /> 上传视频
+                    </Button>
+                  </Upload>
                 )}
-              </FormItem>
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={16} style={{display:'flex',justifyContent:'center',marginTop:'20px'}}>

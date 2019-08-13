@@ -8,8 +8,6 @@ const baseUrl = '/wookong';
 
 
 export async function uploadFile(params) {
-  const str = JSON.stringify(params);
-  console.log('上传穿的数据：',str)
   return request(`${baseUrl}/upload/image`,{
     method:'POST',
     body: params

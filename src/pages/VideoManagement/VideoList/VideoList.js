@@ -46,7 +46,7 @@ class VideoLists extends PureComponent {
 
   columns = [
     {
-      title: '文件名称',
+      title: '名称',
       dataIndex: 'name',
     },
     {

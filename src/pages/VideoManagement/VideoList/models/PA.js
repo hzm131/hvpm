@@ -35,9 +35,6 @@ export default {
     },
     *remove({ payload,callback }, { call, put }) {
       const response = yield call(removePA, payload);
-      console.log("ressss",response);
-      console.log("type",typeof response);
-      console.log("sssss")
       if(callback) callback(response)
     },
 

@@ -1,4 +1,4 @@
-import { queryPlan,uploadFile,searchList } from '@/services/PA';
+import { queryPlan,uploadFile,removePA } from '@/services/PA';
 
 export default {
   namespace: 'PA',
@@ -14,41 +14,31 @@ export default {
     *fetch({ payload,callback }, { call, put }) {
       const response = yield call(queryPlan, payload);
       console.log('获得数据',response)
-      if(response){
-        const obj ={
+      let obj = {};
+      if(response.data.videos){
+        obj ={
           list:response.data.videos,
           pagination:{
             total: response.data.total
           }
         };
-        yield put({
-          type: 'save',
-          payload: obj,
-        });
       }
-      if (callback) callback(response.data);
+      yield put({
+        type: 'save',
+        payload: obj,
+      });
     },
     *uploadFile({ payload,callback }, { call, put }) {
       const response = yield call(uploadFile, payload);
       console.log('上传返回',response)
       if (callback) callback(response);
     },
-    *search({ payload,callback }, { call, put }) {
-      const response = yield call(searchList, payload);
-      console.log('查询',response)
-      if(response){
-        const obj ={
-          list:response.data.videos,
-          pagination:{
-            total: response.data.total
-          }
-        };
-        yield put({
-          type: 'save',
-          payload: obj,
-        });
-      }
-      if (callback) callback(response);
+    *remove({ payload,callback }, { call, put }) {
+      const response = yield call(removePA, payload);
+      console.log("ressss",response);
+      console.log("type",typeof response);
+      console.log("sssss")
+      if(callback) callback(response)
     },
 
 

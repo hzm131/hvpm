@@ -17,13 +17,15 @@ export async function uploadFile(params) {
 }
 
 export async function queryPlan(params) {
-  return request(`${baseUrl}/video/query`,{
+  console.log(`/video/query?${stringify(params)}`)
+  return request(`${baseUrl}/video/query?${stringify(params)}`,{
     method:'GET',
   });
 }
 
-export async function searchList(params) {
-  return request(`${baseUrl}/video/query?${stringify(params)}`,{
-    method:'GET',
+export async function removePA(params) {
+  console.log(`/video/delete/${params.videoId}`)
+  return request(`${baseUrl}/video/delete/${params.videoId}`,{
+    method:'DELETE',
   });
 }

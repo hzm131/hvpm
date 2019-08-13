@@ -44,10 +44,10 @@ const routesConfig = [
       //   ],
       // },
 
-      // 管理员 dashboard
+      // 首页
       {
-        path: '/dashboard/projectDashboard',
-        component: './Dashboard/projectDashboard',
+        path: '/home/news',
+        component: './Home/Home',
       },
       // {
       //   path: '/dashboard/analysis',

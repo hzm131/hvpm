@@ -10,7 +10,7 @@ const Authorized = RenderAuthorized(Authority);
 // 根据权限跳转首页
 const IndexPage = ({ children, location }) => {
   if (location.pathname === '/') {
-    let indexPage = '/dashboard/projectDashboard'; // 默认管理员统计页面
+    let indexPage = '/home/news'; // 默认管理员统计页面
 
     // 查看角色是否配置 index, 并且设置 index 页面
     getAuthority().forEach(item => {

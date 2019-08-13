@@ -159,8 +159,7 @@ export default function request(url, option) {
       })
       .then(res => {
         // 服务器返回错误信息处理
-        console.log("错误处理",res)
-        const hasError = res.status === 403;
+        const hasError = res.status === 401;
         if (hasError) {
           // 错误信息提示
           /*notification.error({
@@ -168,20 +167,20 @@ export default function request(url, option) {
             description: res.errMsg,
           });*/
           // 登录失效
-          if (res.data === '未经授权访问此资源') {
-            console.log("进来")
             // @HACK
             /* eslint-disable no-underscore-dangle */
             window.g_app._store.dispatch({
               type: 'login/logout',
             });
-          }
-
-          return Promise.reject(res.error);
+          return Promise.reject(res.data);
+        }
+        if(typeof res === 'string'){
+          res = JSON.parse(res);
         }
         return res;
       })
       .catch(e => {
+        console.log("e",e)
         const status = e.status;
         if (status === 401) {
           // @HACK

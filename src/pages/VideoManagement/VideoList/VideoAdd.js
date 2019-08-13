@@ -65,11 +65,12 @@ class ProjectAddForms extends PureComponent {
     } = this.props;
     const props = {
       name: 'file',
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      action: '/wookong/upload/image',
       headers: {
-        authorization: 'authorization-text',
+        authorization: this.state.strToken,
       },
       onChange(info) {
+        console.log("info",info)
         if (info.file.status !== 'uploading') {
           console.log(info.file, info.fileList);
         }

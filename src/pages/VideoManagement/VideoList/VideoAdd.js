@@ -57,29 +57,29 @@ class ProjectAddForms extends PureComponent {
     }
   }
 
-  props = {
-    name: 'file',
-    action: 'http://192.168.2.219:3000/upload/video',
-    headers: {
-      authorization: this.state.strToken,
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
 
   render() {
 
     const {
       form: { getFieldDecorator },
     } = this.props;
+    const props = {
+      name: 'file',
+      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      headers: {
+        authorization: 'authorization-text',
+      },
+      onChange(info) {
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+    };
 
     return (
       <PageHeaderWrapper>
@@ -165,7 +165,7 @@ class ProjectAddForms extends PureComponent {
               <Form.Item label='上传视频'>
                 {getFieldDecorator('uploadVideo',{
                 })(
-                  <Upload {...this.props}>
+                  <Upload {...props}>
                     <Button>
                       <Icon type="upload" /> 上传视频
                     </Button>

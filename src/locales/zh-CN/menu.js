@@ -145,5 +145,7 @@ export default {
   'menu.videomanagement.projectreview.query': '33',
   'menu.workmanagement.projectmaintain.list': '11',
   'menu.workmanagement.projectmaintain.update': '00',
+  'menu.videomanagement.comment': '评论管理',
+  'menu.videomanagement.comment.list': '评论管理(列表)',
 
 };

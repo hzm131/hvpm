@@ -1,66 +1,49 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
-import storage from '@/utils/storage'
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import storage from '@/utils/storage'
 import {
-  Row,
-  Col,
   Form,
   Input,
+  Divider,
   Button,
   Card,
-  Divider,
+  Row,
+  Col,
   Popconfirm,
+  message,
 } from 'antd';
-import NormalTable from '@/components/NormalTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
-import styles from '../../Sysadmin/UserAdmin.less';
+import styles from '@/pages/Sysadmin/UserAdmin.less';
+import NormalTable from '@/components/NormalTable';
 
 const FormItem = Form.Item;
 
-
-@connect(({ PA, loading }) => ({
-  PA,
-  loading: loading.models.PA,
+@connect(({CM,loading }) => ({
+  CM,
+  submitting: loading.effects.CM,
 }))
 @Form.create()
+class Comment extends PureComponent {
+  state ={
 
-class VideoLists extends PureComponent {
-  state = {
-    initData:null,
-    conditions:"",
-    page:{}
   };
 
   columns = [
     {
-      title: '名称',
-      dataIndex: 'name',
+      title: '视频名称',
+      dataIndex: 'video',
+      render:(text)=>text.name
     },
     {
-      title: '产地',
-      dataIndex: 'origin',
+      title: '评论人员',
+      dataIndex: 'general_user',
+      render:(text)=> text.username
     },
     {
-      title: '片长',
-      dataIndex: 'duration',
-    },
-    {
-      title: '语种',
-      dataIndex: 'language',
-    },
-    {
-      title: '年份',
-      dataIndex: 'years',
-    },
-    {
-      title: '评分',
-      dataIndex: 'score',
-    },
-    {
-      title: '类别',
-      dataIndex: 'category',
+      title: '评论内容',
+      dataIndex: 'content',
     },
     {
       title: formatMessage({ id: 'validation.operation' }),
@@ -76,28 +59,13 @@ class VideoLists extends PureComponent {
       ),
     },
   ];
-  //点击删除
-  handleDelete = (record)=>{
-    console.log("record",record);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'PA/remove',
-      payload:{
-        videoId: record.id
-      }
-    })
-  };
 
-  handleCorpAdd = () => {
-    router.push('/videomanagement/VideoList/add');
-  };
+
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // this.getMock();
-    //从缓存取公司id
     dispatch({
-      type:'PA/fetch',
+      type:'CM/fetch',
       payload:{
         limit:10,
         offset:0
@@ -105,45 +73,17 @@ class VideoLists extends PureComponent {
     })
   }
 
-  handleStandardTableChange = (pagination)=>{
-    const { dispatch } = this.props;
-    const { conditions} = this.state;
-    const obj = {
-      offset: (pagination.current-1)*pagination.pageSize,
-      limit: pagination.pageSize,
-    };
-    console.log("obj",obj);
-    if(conditions){
-      const param = {
-        ...obj,
-        conditions
-      };
-      dispatch({
-        type:'PA/fetch',
-        payload: param,
-      });
-      return
-    }
-    dispatch({
-      type:'PA/fetch',
-      payload: obj,
-    });
-    this.setState({
-      page:obj
-    });
-  };
-
   findList = (e) => {
     const { dispatch, form } = this.props;
     e.preventDefault();
-    form.validateFieldsAndScroll(async (err, values) => {
+    form.validateFields(async (err, values) => {
       const { name } = values;
       if(name){
         this.setState({
           conditions:name
         });
         dispatch({
-          type:'PA/fetch',
+          type:'CM/fetch',
           payload: {
             limit:10,
             offset:0,
@@ -162,7 +102,7 @@ class VideoLists extends PureComponent {
     });
     form.resetFields();
     dispatch({
-      type:'PA/fetch',
+      type:'CM/fetch',
       payload:{
         ...page
       }
@@ -205,19 +145,19 @@ class VideoLists extends PureComponent {
   }
 
   render() {
+
     const {
-      loading,
-      PA:{ data }
+      form: { getFieldDecorator },
+      CM:{data},
+      loading
     } = this.props;
-    const {  initData } = this.state;
 
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
           <div className={styles.userAdmin}>
             <div className={styles.userAdminForm}>{this.renderForm()}</div>
-            <div className={styles.userAdminOperator}>
-
+              <div className={styles.userAdminOperator}>
             </div>
             <NormalTable
               loading={loading}
@@ -225,7 +165,6 @@ class VideoLists extends PureComponent {
               columns={this.columns}
               onChange={this.handleStandardTableChange}
             />
-
           </div>
         </Card>
       </PageHeaderWrapper>
@@ -233,4 +172,4 @@ class VideoLists extends PureComponent {
   }
 }
 
-export default VideoLists;
+export default Comment;

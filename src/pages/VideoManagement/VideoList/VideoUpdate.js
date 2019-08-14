@@ -25,7 +25,7 @@ const { Option } = Select;
   submitting: loading.effects['PA/submitRegularForm'],
 }))
 @Form.create()
-class ProjectAddForms extends PureComponent {
+class VideoUpdate extends PureComponent {
   state ={
     strToken:"",
     imgId:null,
@@ -42,17 +42,17 @@ class ProjectAddForms extends PureComponent {
         message.error('填写完整表单')
         return
       }*/
-       const obj = {
-         ...values,
-         years:values.years.format('YYYY-MM-DD'),
-         score:Number(values.score),
-         image_src_id:this.state.imgId,
-         video_src_id:this.state.videoId,
-       }
-       delete obj.uploadImage
-       delete obj.uploadVideo
+      const obj = {
+        ...values,
+        years:values.years.format('YYYY-MM-DD'),
+        score:Number(values.score),
+        image_src_id:this.state.imgId,
+        video_src_id:this.state.videoId,
+      }
+      delete obj.uploadImage
+      delete obj.uploadVideo
 
-       console.log('obj',obj)
+      console.log('obj',obj)
       dispatch({
         type:'PA/add',
         payload: obj,
@@ -100,20 +100,20 @@ class ProjectAddForms extends PureComponent {
           console.log(info.file, info.fileList);
         }
 
-          if (info.file.status === 'done') {
-            if(info.file.response.status === 200){
-              message.success(`${info.file.name} 封面上传成功`,1,()=>{
-                that.setState({
-                  imgId:info.file.response.data,
-                  imageList:info.fileList
-                })
-              });
-            }
-          } else if (info.file.status === 'error'){
-            message.error(`${info.file.name} 封面上传失败`,1,()=>{
-               router.push('/user/login')
+        if (info.file.status === 'done') {
+          if(info.file.response.status === 200){
+            message.success(`${info.file.name} 封面上传成功`,1,()=>{
+              that.setState({
+                imgId:info.file.response.data,
+                imageList:info.fileList
+              })
             });
           }
+        } else if (info.file.status === 'error'){
+          message.error(`${info.file.name} 封面上传失败`,1,()=>{
+            router.push('/user/login')
+          });
+        }
 
       },
       onRemove: file => {
@@ -287,4 +287,4 @@ class ProjectAddForms extends PureComponent {
   }
 }
 
-export default ProjectAddForms;
+export default VideoUpdate;

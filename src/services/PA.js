@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import storage from '@/utils/storage'
+
 // 代理路径
 const baseUrl = '/wookong';
 // 假数据接口
@@ -33,8 +33,8 @@ export async function removeImg(params) {
     method:'DELETE',
   });
 }
-export async function add(params) {
 
+export async function add(params) {
   return request(`${baseUrl}/video/create`,{
     method:'POST',
     body: params

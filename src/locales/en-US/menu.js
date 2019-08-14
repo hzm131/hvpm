@@ -74,4 +74,6 @@ export default {
   'menu.account.settings': 'Account Settings',
   'menu.account.trigger': 'Trigger Error',
   'menu.account.logout': 'Logout',
+  'menu.videomanagement.comment': 'Comment management',
+  'menu.videomanagement.comment.list': 'Comment management(List)',
 };

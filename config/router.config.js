@@ -203,9 +203,39 @@ const routesConfig = [
                 name: 'add',
                 component: './VideoManagement/VideoList/VideoAdd',
               },
+              {
+                path: '/videomanagement/VideoList/update',
+                name: 'update',
+                component: './VideoManagement/VideoList/VideoUpdate',
+              },
             ],
           },
-
+          {
+            path: '/videomanagement/comment',
+            name: 'comment',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/videomanagement/comment',
+                redirect: '/videomanagement/comment/list',
+              },
+              {
+                path: '/videomanagement/comment/list',
+                name: 'list',
+                component: './VideoManagement/Comment/Comment',
+              },
+              /*{
+                path: '/videomanagement/comment/add',
+                name: 'add',
+                component: './VideoManagement/Comment/CommentAdd',
+              },*/
+              /*{
+                path: '/videomanagement/comment/update',
+                name: 'update',
+                component: './VideoManagement/Comment/CommentUpdate',
+              },*/
+            ],
+          },
         ],
       },
       //绩效管理

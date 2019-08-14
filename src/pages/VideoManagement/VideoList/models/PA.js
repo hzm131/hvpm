@@ -1,4 +1,7 @@
-import { queryPlan,uploadFile,removePA } from '@/services/PA';
+import {
+  message,
+} from 'antd';
+import { queryPlan,uploadFile,removePA,removeImg,add } from '@/services/PA';
 
 export default {
   namespace: 'PA',
@@ -37,7 +40,20 @@ export default {
       const response = yield call(removePA, payload);
       if(callback) callback(response)
     },
+    *removeImg({ payload,callback }, { call, put }) {
+      const response = yield call(removeImg, payload);
+      if(callback) callback(response)
+    },
+    *add({ payload,callback }, { call, put }) {
+      const response = yield call(add, payload);
+      console.log('add',response)
+      if(response.status === 200){
+        if(callback) callback(response)
+      }else{
+        message.error('新建失败')
+      }
 
+    },
 
 
   },

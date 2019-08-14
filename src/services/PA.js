@@ -27,3 +27,16 @@ export async function removePA(params) {
     method:'DELETE',
   });
 }
+
+export async function removeImg(params) {
+  return request(`${baseUrl}/video/image/delete/${params.id}`,{
+    method:'DELETE',
+  });
+}
+export async function add(params) {
+
+  return request(`${baseUrl}/video/create`,{
+    method:'POST',
+    body: params
+  });
+}

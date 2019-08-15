@@ -60,7 +60,35 @@ class Comment extends PureComponent {
     },
   ];
 
+  columns2 = [
+    {
+      title: '回复用户',
+      dataIndex: 'username',
+      //render:(text)=>text.name
+    },
+    {
+      title: '回复者',
+      dataIndex: '',
+      //render:(text)=> text.username
+    },
+    {
+      title: '评论内容',
+      dataIndex: 'content',
+    },
+    {
+      title: formatMessage({ id: 'validation.operation' }),
+      render: (text, record) => (
+        <Fragment>
+          <Popconfirm title="确定删除吗?" onConfirm={() => this.handleDelete(record)}>
+            <a href="#javascript:;" style={{color:'#ff2340'}}>删除</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <span style={{color:'#1890ff'}}>详情</span>
 
+        </Fragment>
+      ),
+    },
+  ];
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -130,16 +158,6 @@ class Comment extends PureComponent {
             </Button>
           </Col>
         </Row>
-        <Row>
-          <Col md={8} sm={24}>
-            <span>
-
-              <Button icon="plus" onClick={this.handleCorpAdd} type="primary" style={{ marginLeft: 15 }}>
-               新建
-              </Button>
-            </span>
-          </Col>
-        </Row>
       </Form>
     );
   }
@@ -164,6 +182,17 @@ class Comment extends PureComponent {
               data={data}
               columns={this.columns}
               onChange={this.handleStandardTableChange}
+            />
+          </div>
+        </Card>
+
+        <Card bordered={false}>
+          <div className={styles.userAdmin}>
+            <NormalTable
+              loading={loading}
+              data={data}
+              columns={this.columns2}
+              //onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>

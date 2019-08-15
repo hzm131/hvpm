@@ -159,23 +159,25 @@ export default function request(url, option) {
       })
       .then(res => {
         // 服务器返回错误信息处理
-        const hasError = res.status === 401;
-        if (hasError) {
-          // 错误信息提示
-          /*notification.error({
-            message: '提示',
-            description: res.errMsg,
-          });*/
-          // 登录失效
+        if(res){
+          const hasError = res.status === 401;
+          if (hasError) {
+            // 错误信息提示
+            /*notification.error({
+              message: '提示',
+              description: res.errMsg,
+            });*/
+            // 登录失效
             // @HACK
             /* eslint-disable no-underscore-dangle */
             window.g_app._store.dispatch({
               type: 'login/logout',
             });
-          return Promise.reject(res.data);
-        }
-        if(typeof res === 'string'){
-          res = JSON.parse(res);
+            return Promise.reject(res.data);
+          }
+          if(typeof res === 'string'){
+            res = JSON.parse(res);
+          }
         }
         return res;
       })

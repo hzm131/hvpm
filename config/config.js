@@ -80,49 +80,13 @@ export default {
     //   pathRewrite: { '^/server': '' },
     // },
     '/wookong': {
-      // target: 'https://223.105.3.39/nien-0.0.1-SNAPSHOT',
-      target: 'http://127.0.0.1:3000',
+      target: 'http://192.168.2.219:3000',
       changeOrigin: true,
       secure: false,
       pathRewrite: {
         '^/wookong/': '',
       },
     },
-    '/aa': {
-      target: 'https://api.huobi.pro',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/aa/': '',
-      },
-    },
-    '/bb': {
-      target: 'https://pro-api.coinmarketcap.com',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/bb/': '',
-      },
-    },
-    '/cc': {
-      target: 'https://api.binance.com',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/cc/': '',
-      },
-    },
-    '/dd': {
-      target: 'https://www.okex.com',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/dd/': '',
-      },
-    },
-    // '/mycomputer/': {
-    //     //   target: 'http://127.0.0.1:8080/',
-    //     //   changeOrigin: true,
-    //     //   pathRewrite: {
-    //     //     '^/mycomputer': '',
-    //     //   },
-    //     // },
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {

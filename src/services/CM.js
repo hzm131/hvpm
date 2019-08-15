@@ -8,3 +8,10 @@ export async function queryCM(params) {
     method:'GET',
   });
 }
+
+export async function childFetch(params) {
+  console.log("params",params)
+  return request(`${baseUrl}/reply/query?${stringify(params)}`,{
+    method:'GET',
+  });
+}

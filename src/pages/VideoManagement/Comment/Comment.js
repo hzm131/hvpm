@@ -1,7 +1,6 @@
 import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import storage from '@/utils/storage'
 import {
   Form,
   Input,
@@ -17,6 +16,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from 'umi/router';
 import styles from '@/pages/Sysadmin/UserAdmin.less';
 import NormalTable from '@/components/NormalTable';
+import "./css.less"
 
 const FormItem = Form.Item;
 
@@ -46,6 +46,14 @@ class Comment extends PureComponent {
       dataIndex: 'content',
     },
     {
+      title: '评论时间',
+      dataIndex: 'created_at',
+    },
+    {
+      title: '点赞',
+      dataIndex: 'awesome',
+    },
+    {
       title: formatMessage({ id: 'validation.operation' }),
       render: (text, record) => (
         <Fragment>
@@ -63,17 +71,25 @@ class Comment extends PureComponent {
   columns2 = [
     {
       title: '回复用户',
-      dataIndex: 'username',
-      //render:(text)=>text.name
+      dataIndex: 'reply_user',
+      render:(text)=> text.username
     },
     {
       title: '回复者',
-      dataIndex: '',
-      //render:(text)=> text.username
+      dataIndex: 'general_user',
+      render:(text)=> text.username
     },
     {
       title: '评论内容',
       dataIndex: 'content',
+    },
+    {
+      title: '评论时间',
+      dataIndex: 'created_at',
+    },
+    {
+      title: '点赞',
+      dataIndex: 'awesome',
     },
     {
       title: formatMessage({ id: 'validation.operation' }),
@@ -84,7 +100,6 @@ class Comment extends PureComponent {
           </Popconfirm>
           <Divider type="vertical" />
           <span style={{color:'#1890ff'}}>详情</span>
-
         </Fragment>
       ),
     },
@@ -162,11 +177,15 @@ class Comment extends PureComponent {
     );
   }
 
+  setRowClassName = (record) => {
+    return record.id === this.state.rowId ? 'clickRowStyl' : '';
+  };
+
   render() {
 
     const {
       form: { getFieldDecorator },
-      CM:{data},
+      CM:{data,childData},
       loading
     } = this.props;
 
@@ -181,6 +200,26 @@ class Comment extends PureComponent {
               loading={loading}
               data={data}
               columns={this.columns}
+              onRow={(record)=>{
+                return {
+                  onClick:()=>{
+                    console.log("record",record);
+                    const { dispatch } = this.props;
+                    dispatch({
+                      type:'CM/childFetch',
+                      payload:{
+                        limit:10,
+                        offset:0,
+                        comment_id:record.id
+                      }
+                    });
+                    this.setState({
+                      rowId: record.id,
+                    });
+                  }
+                }
+              }}
+              rowClassName={this.setRowClassName}
               onChange={this.handleStandardTableChange}
             />
           </div>
@@ -190,9 +229,9 @@ class Comment extends PureComponent {
           <div className={styles.userAdmin}>
             <NormalTable
               loading={loading}
-              data={data}
+              data={childData}
               columns={this.columns2}
-              //onChange={this.handleStandardTableChange}
+              onChange={this.handleStandardChildTableChange}
             />
           </div>
         </Card>

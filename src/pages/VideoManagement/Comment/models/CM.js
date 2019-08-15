@@ -1,12 +1,16 @@
 import {
   message,
 } from 'antd';
-import { queryCM,removePA,removeImg,add } from '@/services/CM';
+import { queryCM,removePA,removeImg,add,childFetch } from '@/services/CM';
 
 export default {
   namespace: 'CM',
   state: {
     data: {
+      list: [],
+      pagination: {},
+    },
+    childData: {
       list: [],
       pagination: {},
     },
@@ -28,6 +32,24 @@ export default {
       }
       yield put({
         type: 'save',
+        payload: obj,
+      });
+    },
+    *childFetch({ payload,callback }, { call, put }) {
+      console.log("payload",payload)
+      const response = yield call(childFetch, payload);
+      console.log('子表',response)
+      let obj = {};
+      if(response.data.replys){
+        obj ={
+          list:response.data.replys,
+          pagination:{
+            total: response.data.total
+          }
+        };
+      }
+      yield put({
+        type: 'child',
         payload: obj,
       });
     },
@@ -56,6 +78,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    child(state, action) {
+      return {
+        ...state,
+        childData: action.payload,
       };
     },
   },

@@ -147,5 +147,8 @@ export default {
   'menu.workmanagement.projectmaintain.update': '00',
   'menu.videomanagement.comment': '评论管理',
   'menu.videomanagement.comment.list': '评论管理(列表)',
+  'menu.user': '用户管理',
+  'menu.user.generaluser': '用户管理',
+  'menu.user.generaluser.list': '用户管理(列表)',
 
 };

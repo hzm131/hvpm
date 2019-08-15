@@ -9,6 +9,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
 import { connect } from 'dva';
+import storage from '@/utils/storage';
 const FormItem = Form.Item;
 
 const CreateForm = Form.create()(props => {
@@ -181,6 +182,14 @@ export default class GlobalHeaderRight extends PureComponent {
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
     }
+
+    const user = storage.get('user');
+    let username = "";
+    if (user){
+      if (user.username){
+        username = user.username;
+      }
+    }
     return (
       <div className={className}>
         <HeaderSearch
@@ -249,11 +258,11 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
         </NoticeIcon>
-        {currentUser.name ? (
+        {username ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar size="small" className={styles.avatar} src={avatar} alt="avatar" />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{username}</span>
             </span>
           </HeaderDropdown>
         ) : (

@@ -9,7 +9,6 @@ export default {
 
   effects: {
     *update({ payload,callback }, { call, put }) {
-
       const response = yield call(updatePassword,payload);
       console.log("ssss",payload);
       if(callback) callback(response)

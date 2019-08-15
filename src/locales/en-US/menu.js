@@ -76,4 +76,7 @@ export default {
   'menu.account.logout': 'Logout',
   'menu.videomanagement.comment': 'Comment management',
   'menu.videomanagement.comment.list': 'Comment management(List)',
+  'menu.user': 'User Management',
+  'menu.user.generaluser': 'User Management',
+  'menu.user.generaluser.list': 'User Management(List)',
 };

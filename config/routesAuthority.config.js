@@ -1,6 +1,6 @@
 export const roles = {
   // 项目经理
-  pm: {
+  /*pm: {
     index: '/account/center',
     accessRoutes: [
       {
@@ -212,7 +212,7 @@ export const roles = {
           {
             path: '/sysadmin',
           },
-    /*      {
+    /!*      {
             path: '/workmanagement',
           },
           {
@@ -235,21 +235,21 @@ export const roles = {
           },
           {
             path: '/dashboard/projectDashboard',
-          },*/
+          },*!/
         ],
       },
     ],
-  },
+  },*/
   admin: {
-    index: '/dashboard/projectDashboard',
-    accessRoutes: [
+    index: '/home/news',
+    /*accessRoutes: [
       {
         path: '/',
         routes: [
           {
             path: '/sysadmin',
           },
-          /*      {
+          /!*      {
                   path: '/workmanagement',
                 },
                 {
@@ -272,10 +272,10 @@ export const roles = {
                 },
                 {
                   path: '/dashboard/projectDashboard',
-                },*/
+                },*!/
         ],
       },
-    ],
+    ],*/
   },
 
 };

@@ -22,9 +22,10 @@ export default {
       const response = yield call(requestLogin, payload);
       //if (!data) return;
       console.log('登陆信息：',response);
-      const { data } = response;
+      const { data,user } = response;
       // 本地持久化 sessionID
       storage.set('token', data);
+      storage.set('user', user);
 
       // 角色权限设置
       const getAuthority = ()=>['admin'];
@@ -78,6 +79,7 @@ export default {
 
       // 清除本地数据
       storage.remove(['token']);
+      storage.remove(['user']);
 
       yield put(
         routerRedux.push({

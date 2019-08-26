@@ -63,7 +63,12 @@ class VideoLists extends PureComponent {
       dataIndex: 'category',
     },
     {
+      title: '导演',
+      dataIndex: 'director',
+    },
+    {
       title: formatMessage({ id: 'validation.operation' }),
+      dataIndex: 'key',
       render: (text, record) => (
         <Fragment>
           <Popconfirm title="确定删除吗?" onConfirm={() => this.handleDelete(record)}>

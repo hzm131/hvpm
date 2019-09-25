@@ -105,6 +105,39 @@ const routesConfig = [
           },
         ],
       },
+      {
+        path: '/article',
+        icon: 'project',
+        name: 'article',
+        routes: [
+          {
+            path: '/article/release',
+            name: 'release',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/article/release',
+                redirect: '/article/release/list',
+              },
+              {
+                path: '/article/release/list',
+                name: 'list',
+                component: './Article/Release/List',
+              },
+              {
+                path: '/article/release/add',
+                name: 'add',
+                component: './Article/Release/Add',
+              },
+              {
+                path: '/article/release/update',
+                name: 'update',
+                component: './Article/Release/Update',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];

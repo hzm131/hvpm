@@ -150,5 +150,9 @@ export default {
   'menu.user': '用户管理',
   'menu.user.generaluser': '用户管理',
   'menu.user.generaluser.list': '用户管理(列表)',
-
+  'menu.article':'文章',
+  'menu.article.release':'发布',
+  'menu.article.release.list':'发布(列表)',
+  'menu.article.release.add':'发布(添加)',
+  'menu.article.release.update':'发布(编辑)',
 };

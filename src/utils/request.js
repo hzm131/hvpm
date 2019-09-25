@@ -160,8 +160,7 @@ export default function request(url, option) {
       .then(res => {
         // 服务器返回错误信息处理
         if(res){
-          const hasError = res.status === 401;
-          if (hasError) {
+          if (res.status === 401) {
             // 错误信息提示
             /*notification.error({
               message: '提示',

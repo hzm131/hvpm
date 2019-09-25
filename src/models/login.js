@@ -7,7 +7,9 @@ import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { requestLogin, requestLogout } from '@/services/user';
 import storage from '@/utils/storage';
-
+import {
+  message,
+} from 'antd';
 
 
 export default {
@@ -22,11 +24,10 @@ export default {
       const response = yield call(requestLogin, payload);
       //if (!data) return;
       console.log('登陆信息：',response);
-      const { data,user } = response;
+      const { data,user,status } = response;
       // 本地持久化 sessionID
-      if(data === "用户名或密码错误"){
-        console.log("出现了返回值处理错误")
-        return
+      if(data === "用户名或密码有问题" ){
+        return message.error("用户名或密码有问题")
       }
       storage.set('token', data);
       storage.set('user', user);

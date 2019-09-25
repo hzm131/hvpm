@@ -24,6 +24,10 @@ export default {
       console.log('登陆信息：',response);
       const { data,user } = response;
       // 本地持久化 sessionID
+      if(data === "用户名或密码错误"){
+        console.log("出现了返回值处理错误")
+        return
+      }
       storage.set('token', data);
       storage.set('user', user);
 

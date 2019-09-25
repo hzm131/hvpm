@@ -74,13 +74,8 @@ export default {
     '@antv/data-set': 'DataSet',
   },
   proxy: {
-    // '/server/api/': {
-    //   target: 'https://preview.pro.ant.design/',
-    //   changeOrigin: true,
-    //   pathRewrite: { '^/server': '' },
-    // },
     '/wookong': {
-      target: 'http://127.0.0.1:3000',
+      target: 'http://192.168.2.166:3000',
       changeOrigin: true,
       secure: false,
       pathRewrite: {

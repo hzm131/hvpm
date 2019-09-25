@@ -3,7 +3,8 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import {
   Form,
-  Card
+  Card,
+  message
 } from 'antd';
 
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -12,7 +13,10 @@ import BraftEditor from 'braft-editor'
 // 引入编辑器样式
 import 'braft-editor/dist/index.css'
 
-
+@connect(({ release, loading }) => ({
+  release,
+  loading: loading.models.release,
+}))
 @Form.create()
 class Add extends PureComponent {
 
@@ -42,8 +46,41 @@ class Add extends PureComponent {
     this.setState({ editorState })
   }
 
+  uploadFn = (param) => {
+    console.log("param",param)
+    const formData = new FormData();
+    formData.append('image', param.file);
+    const { dispatch } = this.props;
+    dispatch({
+      type:'release/uploadFileImage',
+      payload:formData,
+      callback:(res)=>{
+        if(res.status === 200){
+          const { id,src,title } = res.data;
+          param.success({
+            url: src,
+            meta: {
+              id,
+              title,
+              alt: title,
+              //loop: true, // 指定音视频是否循环播放
+              //autoPlay: true, // 指定音视频是否自动播放
+              //controls: true, // 指定音视频是否显示控制栏
+              //poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+            }
+          })
+        }else{
+          message.error(res.error);
+          param.error({
+            msg: res.error
+          })
+        }
+      }
+    })
+  };
+
   render() {
-    const { editorState } = this.state
+    const { editorState } = this.state;
     return (
       <PageHeaderWrapper>
         <Card>
@@ -52,6 +89,7 @@ class Add extends PureComponent {
               value={editorState}
               onChange={this.handleEditorChange}
               onSave={this.submitContent}
+              media={{ uploadFn: this.uploadFn }}
             />
           </div>
         </Card>

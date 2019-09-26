@@ -24,9 +24,11 @@ export default {
       const response = yield call(requestLogin, payload);
       //if (!data) return;
       console.log('登陆信息：',response);
-      const { data,user,status } = response;
+      const { data,user } = response;
       // 本地持久化 sessionID
       if(data === "用户名或密码有问题" ){
+        storage.remove(['token']);
+        storage.remove(['user']);
         return message.error("用户名或密码有问题")
       }
       storage.set('token', data);

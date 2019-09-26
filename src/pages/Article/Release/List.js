@@ -34,7 +34,14 @@ class List extends PureComponent {
   };
 
   columns = [
-
+    {
+      title: '标题',
+      dataIndex: 'title'
+    },
+    {
+      title: '发布时间',
+      dataIndex: 'created_at'
+    },
     {
       title: formatMessage({ id: 'validation.operation' }),
       dataIndex: 'key',

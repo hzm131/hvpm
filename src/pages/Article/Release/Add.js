@@ -142,7 +142,7 @@ class Add extends PureComponent {
               <Form.Item label="设置标题">
                 {getFieldDecorator('title',{
                   rules: [{required: true,message:'标题必须有'}],
-                })(<TextArea  maxlength={'40'} placeholder="限制40字以内" />)}
+                })(<TextArea  maxLength={40} placeholder="限制40字以内" />)}
               </Form.Item>
             </Col>
           </Row>

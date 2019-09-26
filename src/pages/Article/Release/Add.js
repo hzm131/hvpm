@@ -1,17 +1,26 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import {
   Form,
   Card,
-  message
+  message,
+  Button,
+  Row,
+  Col,
+  Input,
+  Upload,
+  Icon,
+  Divider
 } from 'antd';
-
+import FooterToolbar from '@/components/FooterToolbar';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 // 引入编辑器组件
 import BraftEditor from 'braft-editor'
 // 引入编辑器样式
 import 'braft-editor/dist/index.css'
+import router from 'umi/router';
+
+const { TextArea } = Input;
 
 @connect(({ release, loading }) => ({
   release,
@@ -70,30 +79,120 @@ class Add extends PureComponent {
             }
           })
         }else{
-          message.error(res.error);
+          message.error(res.data);
           param.error({
-            msg: res.error
+            msg: res.data
           })
         }
       }
     })
   };
 
+  myValidateFn = (file) => {
+    return new Promise((resolve, reject) => {
+      if(file.size < 1024 * 100 * 500){
+        resolve()
+      }else{
+        reject()
+      }
+    })
+  };
+
+  backClick =()=>{
+    router.push('/article/release/list')
+  };
+
   render() {
+    const {
+      form: { getFieldDecorator },
+      dispatch,
+      loading
+    } = this.props;
     const { editorState } = this.state;
+
+    const fileList = [
+      {
+        uid: '-1',
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+      {
+        uid: '-2',
+        name: 'yyy.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      },
+    ];
+
+    const props = {
+      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      listType: 'picture',
+      defaultFileList: [...fileList],
+    };
+
+
     return (
       <PageHeaderWrapper>
         <Card>
-          <div className="my-component">
-            <BraftEditor
-              value={editorState}
+          <Row>
+            <Col lg={24} md={24} sm={24}>
+              <Form.Item label="设置标题">
+                {getFieldDecorator('title',{
+                  rules: [{required: true,message:'标题必须有'}],
+                })(<TextArea  maxlength={'40'} placeholder="限制40字以内" />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row className="my-component" style={{marginTop:'20px'}}>
+            <Form.Item label="主题内容">
+              {getFieldDecorator('content',{
+              rules: [{required: true,message:'内容不能为空'}],
+              initialValue:editorState
+            })(<BraftEditor
+              //value={editorState}
               onChange={this.handleEditorChange}
               onSave={this.submitContent}
-              media={{ uploadFn: this.uploadFn }}
-            />
-          </div>
+              media={{
+                uploadFn: this.uploadFn,
+                validateFn: this.myValidateFn,
+                accepts:{
+                  image: 'image/jpeg,image/gif,image/webp,image/apng,image/svg',
+                  video: 'video/mp4',
+                  audio: 'audio/mp3'
+                }
+              }}
+            />)}
+            </Form.Item>
+          </Row>
+          <Divider />
+          <Row gutter={16}>
+            <Col lg={16} md={16} sm={16}>
+              <Form.Item label="设置主题图片">
+                <Upload {...props}>
+                  <Button>
+                    <Icon type="upload" /> Upload
+                  </Button>
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
         </Card>
+        <FooterToolbar >
+          <Button
+            onClick={this.backClick}
+          >
+            取消
+          </Button>
+          <Button type="primary"
+                  onClick={()=>this.validate()}
+          >
+            提交
+          </Button>
 
+        </FooterToolbar>
       </PageHeaderWrapper>
     );
   }

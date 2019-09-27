@@ -53,39 +53,105 @@ class Add extends PureComponent {
   handleEditorChange = (editorState) => {
     console.log("输出",editorState.toHTML())
     this.setState({ editorState })
-  }
+  };
 
   uploadFn = (param) => {
-    console.log("param",param)
-    const formData = new FormData();
-    formData.append('image', param.file);
-    const { dispatch } = this.props;
-    dispatch({
-      type:'release/uploadFileImage',
-      payload:formData,
-      callback:(res)=>{
-        if(res.status === 200){
-          const { id,src,title } = res.data;
-          param.success({
-            url: src,
-            meta: {
-              id,
-              title,
-              alt: title,
-              //loop: true, // 指定音视频是否循环播放
-              //autoPlay: true, // 指定音视频是否自动播放
-              //controls: true, // 指定音视频是否显示控制栏
-              //poster: 'http://xxx/xx.png', // 指定视频播放器的封面
-            }
-          })
-        }else{
-          message.error(res.data);
-          param.error({
-            msg: res.data
-          })
+    console.log("param",param);
+    console.log("param",param.file.type);
+    const type = param.file.type;
+    if(type === 'image/jpeg' || type === 'image/gif' || type === 'image/webp' || type === 'image/apng' || type === 'image/svg' || type === 'image/png'){
+      const formData = new FormData();
+      formData.append('image', param.file);
+      const { dispatch } = this.props;
+      dispatch({
+        type:'release/uploadFileImage',
+        payload:formData,
+        callback:(res)=>{
+          if(res.status === 200){
+            const { id,src,title } = res.data;
+            param.success({
+              url: src,
+              meta: {
+                id,
+                title,
+                alt: title,
+                //loop: true, // 指定音视频是否循环播放
+                //autoPlay: true, // 指定音视频是否自动播放
+                //controls: true, // 指定音视频是否显示控制栏
+                //poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+              }
+            })
+          }else{
+            message.error(res.data);
+            param.error({
+              msg: res.data
+            })
+          }
         }
-      }
-    })
+      })
+    }
+    if(type === 'video/mp4'){
+      const formData = new FormData();
+      formData.append('video', param.file);
+      const { dispatch } = this.props;
+      dispatch({
+        type:'release/uploadFileVideo',
+        payload:formData,
+        callback:(res)=>{
+          if(res.status === 200){
+            const { id,src,title } = res.data;
+            param.success({
+              url: src,
+              meta: {
+                id,
+                title,
+                alt: title,
+                //loop: true, // 指定音视频是否循环播放
+                //autoPlay: true, // 指定音视频是否自动播放
+                controls: true, // 指定音视频是否显示控制栏
+                //poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+              }
+            })
+          }else{
+            message.error(res.data);
+            param.error({
+              msg: res.data
+            })
+          }
+        }
+      })
+    }
+    if(type === 'audio/mp3'){
+      const formData = new FormData();
+      formData.append('audio', param.file);
+      const { dispatch } = this.props;
+      dispatch({
+        type:'release/uploadFileAudio',
+        payload:formData,
+        callback:(res)=>{
+          if(res.status === 200){
+            const { id,src,title } = res.data;
+            param.success({
+              url: src,
+              meta: {
+                id,
+                title,
+                alt: title,
+                //loop: true, // 指定音视频是否循环播放
+                //autoPlay: true, // 指定音视频是否自动播放
+                controls: true, // 指定音视频是否显示控制栏
+                //poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+              }
+            })
+          }else{
+            message.error(res.data);
+            param.error({
+              msg: res.data
+            })
+          }
+        }
+      })
+    }
   };
 
   myValidateFn = (file) => {
@@ -159,7 +225,7 @@ class Add extends PureComponent {
                 uploadFn: this.uploadFn,
                 validateFn: this.myValidateFn,
                 accepts:{
-                  image: 'image/jpeg,image/gif,image/webp,image/apng,image/svg',
+                  image: 'image/png,image/jpeg,image/gif,image/webp,image/apng,image/svg',
                   video: 'video/mp4',
                   audio: 'audio/mp3'
                 }

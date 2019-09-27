@@ -1,4 +1,4 @@
-import { uploadFileImage } from '@/services/release';
+import { uploadFileImage,uploadFileVideo,uploadFileAudio } from '@/services/release';
 
 export default {
   namespace: 'release',
@@ -14,6 +14,16 @@ export default {
     *uploadFileImage({ payload,callback }, { call, put }) {
       const response = yield call(uploadFileImage, payload);
       console.log('上传返回',response)
+      if (callback) callback(response);
+    },
+    *uploadFileVideo({ payload,callback }, { call, put }) {
+      const response = yield call(uploadFileVideo, payload);
+      console.log('上传video返回',response)
+      if (callback) callback(response);
+    },
+    *uploadFileAudio({ payload,callback }, { call, put }) {
+      const response = yield call(uploadFileAudio, payload);
+      console.log('上传video返回',response)
       if (callback) callback(response);
     },
   },
